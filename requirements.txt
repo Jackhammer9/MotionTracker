@@ -1,0 +1,4 @@
+pyautogui
+mediapipe
+open-cv
+pydirectinput
