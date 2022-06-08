@@ -52,7 +52,7 @@ class Vector3(object):
     def j(self):
         return self.j
 
-    def j(self):
+    def k(self):
         return self.k
 
     def Magnitude(self):
@@ -147,13 +147,6 @@ class Vector3(object):
         vector.Normalize()
         return math.acos(clamp(self.Dot(vector) , -1 , 1)) * 180 / math.pi
 
-    def Angle2(self , vector):
-        if type(vector) != Vector3:
-            raise TypeError(f'Illegal action with type {type(vector)} use Vector3')
-        self.Normalize()
-        vector.Normalize()
-        return math.asin(clamp((self.Cross(vector)).Magnitude() , -1 , 1)) * 180 / math.pi
-
     def Towards(self , vector , MaxDist):
         if type(vector) != Vector3:
             raise TypeError(f'Illegal action with type {type(vector)} use Vector3')
@@ -172,3 +165,6 @@ class Vector3(object):
 
     def One():
         return Vector3(1 , 1 , 1)
+
+    def Zero():
+        return Vector3(0 , 0 , 0)
