@@ -1,5 +1,6 @@
-import cv2 
+import cv2
 import mediapipe
+
 
 class HandDetector:
 
@@ -8,14 +9,15 @@ class HandDetector:
         self.Hands = self.hands.Hands()
         self.mpdraw = mediapipe.solutions.drawing_utils
 
-    def Find(self,img,draw = True):
-        RGB = cv2.cvtColor(img , cv2.COLOR_BGR2RGB)
+    def Find(self, img, draw=True):
+        RGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         self.results = self.Hands.process(RGB)
 
         if self.results.multi_hand_landmarks:
             for hand in self.results.multi_hand_landmarks:
                 if draw:
-                    self.mpdraw.draw_landmarks(img , hand , self.hands.HAND_CONNECTIONS)
+                    self.mpdraw.draw_landmarks(
+                        img, hand, self.hands.HAND_CONNECTIONS)
         return img
 
     def FindPosition(self,img):
