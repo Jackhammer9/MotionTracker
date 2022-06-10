@@ -20,6 +20,9 @@ PINKY_COLLISION_OLD_SECOND = 0
 PreviousFistDistance = 0
 PreviousShieldDistance = 100000
 
+MIDDLE_CLAP_COLLISION = 0
+WRIST_CMC_COLLISION = 0
+
 def FistDetection(lm):
 
         global INDEX_COLLISION_OLD
@@ -224,3 +227,24 @@ def Shield(lm):
         return True
     else:
         PreviousShieldDistance = Distance
+
+def Clap(lm):
+    global WRIST_CMC_COLLISION
+    global MIDDLE_CLAP_COLLISION
+
+    MIDDLE_FINGER_TIP_FIRST = Vector3(lm[12][1] , lm[12][2] , 0)
+    MIDDLE_FINGER_TIP_SECOND = Vector3(lm[12+21][1] , lm[12+21][2] , 0)
+    WRIST_FIRST = Vector3(lm[0][1] , lm[0][2] , 0)
+    WRIST_SECOND = Vector3(lm[0+21][1] , lm[0+21][2] , 0)
+
+    WRIST_CMC_COLLISION_NEW = WRIST_FIRST.Distance(WRIST_SECOND)
+    MIDDLE_CLAP_COLLISION_NEW = MIDDLE_FINGER_TIP_FIRST.Distance(MIDDLE_FINGER_TIP_SECOND)
+
+    if WRIST_CMC_COLLISION_NEW < WRIST_CMC_COLLISION/2 and MIDDLE_CLAP_COLLISION_NEW < MIDDLE_CLAP_COLLISION/2:
+        WRIST_CMC_COLLISION = WRIST_CMC_COLLISION_NEW
+        MIDDLE_CLAP_COLLISION = MIDDLE_CLAP_COLLISION_NEW
+        return True
+    else:
+        WRIST_CMC_COLLISION = WRIST_CMC_COLLISION_NEW
+        MIDDLE_CLAP_COLLISION = MIDDLE_CLAP_COLLISION_NEW
+        return False

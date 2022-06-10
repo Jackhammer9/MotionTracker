@@ -1,16 +1,16 @@
 import cv2
 
 from HandDetection.HandDetectionModule import HandDetector
-from HandDetection.FistDetection import FistDetection , Punched , Shield
+from HandDetection.FistDetection import FistDetection , Punched , Shield , Clap
 
 import time
 import json
 
-def detector():
-    WINDOWLESS_DETECTION = False
+def Launcher(CameraSource , Windowless):
+    WINDOWLESS_DETECTION = Windowless
     ptime = 0
     ctime = 0
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(CameraSource)
     detector = HandDetector()
 
     while True:
@@ -26,26 +26,35 @@ def detector():
             img = cv2.flip(img , 1)
             cv2.putText(img , str(int(fps)) , (10,70) , cv2.FONT_HERSHEY_COMPLEX,3 , (0,255,0) , 3) # put the fps on the image
 
-        if lm:
+        if len(lm) > 21:
+            if Clap(lm):
+                data['Clap'] = True
+                print("Clap")
+            else:
+                data['Clap'] = False
+
             if FistDetection(lm)[0] == 2 and FistDetection(lm)[1]:
                 data['Fist_Locked'] = True
-                if Shield(lm):
-                    data['shield'] = True
-                else:
-                    data['shield'] = False
+
                 if Punched(lm):
                     data['Punched'] = True
-                    print('Punched')
                 else:
                     data['Punched'] = False
+
+                if Shield(lm):
+                    data['Shield'] = True
+                else:
+                    data['Shield'] = False
+
             else:
                 data['Fist_Locked'] = False
                 data['Punched'] = False
-                data['shield'] = False
+                data['Shield'] = False
         else:
+            data['Clap'] = False
             data['Fist_Locked'] = False
             data['Punched'] = False
-            data['shield'] = False
+            data['Shield'] = False
 
         if not WINDOWLESS_DETECTION:    
             cv2.imshow("Motion Tracker" , img)
@@ -60,6 +69,3 @@ def detector():
 
     cam.release()
     cv2.destroyAllWindows()
-
-if __name__ == "__main__":
-    detector()

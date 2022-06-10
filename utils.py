@@ -1,5 +1,10 @@
 from typing import Optional
 from ctypes import wintypes , windll , create_unicode_buffer
+from pygrabber.dshow_graph import FilterGraph
+
+def GetVideoCaptureSources():
+    graph = FilterGraph()
+    return graph.get_input_devices()
 
 def getForegroundWindow():
     hwnd = windll.user32.GetForegroundWindow()
